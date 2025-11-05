@@ -1,16 +1,12 @@
-# absolute_ballin
+# Tugas 7
+1. Widget tree adalah blueprint UI aplikasi, yang mewakili semua widget yang disusun. Sebuah widget induk, seperti Column, berisi satu atau lebih widget anak, seperti Text atau Icon. Hubungan induk-anak ini memberi tahu Flutter cara menyusun dan menampilkan tata letak di layar.
 
-A new Flutter project.
+2. Proyek ini menggunakan Scaffold untuk struktur halaman utama dan AppBar untuk bar atas. Column, Row, dan Center digunakan untuk memposisikan konten, sementara GridView mengatur tombol-tombol. ItemCard menggunakan InkWell untuk efek ketukan dan Material untuk warna, yang berisi widget Icon dan Text untuk menampilkan konten tombol.
 
-## Getting Started
+3. Widget MaterialApp membungkus aplikasi dan menyediakan serangkaian fitur penting yang diperlukan untuk aplikasi Material Design. Ini digunakan sebagai root widget karena mengatur layanan tingkat aplikasi seperti navigasi, menerapkan tema global, dan mendefinisikan "home" atau halaman utama aplikasi.
 
-This project is a starting point for a Flutter application.
+4. StatelessWidget bersifat immutable, artinya properti dan tampilannya tidak dapat berubah setelah dibuat. StatefulWidget bersifat dinamis dan dapat mengubah tampilannya berkali-kali selama siklus hidupnya dengan memanggil setState(). Sebaiknya menggunakan StatelessWidget untuk konten statis dan StatefulWidget untuk apa pun yang perlu diubah berdasarkan interaksi pengguna atau data.
 
-A few resources to get you started if this is your first Flutter project:
+5. BuildContext adalah sebuah objek yang berisi info posisi di dalam widget tree. Ini penting karena memungkinkan widget untuk menemukan dan berinteraksi dengan widget induknya, seperti mengambil tema aplikasi (Theme.of(context)) atau menampilkan snackbar (ScaffoldMessenger.of(context)). Dalam metode build, context dipass argumen, memberikan widget informasi yang dibutuhkannya untuk ditampilkan.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+6. Hot Reload adalah fitur sangat cepat yang menyuntikkan perubahan kode baru langsung ke aplikasi yang sedang berjalan tanpa memulainya ulang, memungkinkan melihat perubahan UI secara instan sambil mempertahankan state aplikasi saat ini (seperti data dalam formulir). Hot Restart lebih lambat karena membangun ulang seluruh widget tree aplikasi dari awal, tetapi masih lebih cepat daripada menghentikan dan menjalankan ulang sepenuhnya. Proses ini mengatur ulang state aplikasi ke nilai awalnya.
