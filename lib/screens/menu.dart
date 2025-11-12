@@ -1,5 +1,6 @@
+import 'package:absolute_ballin/widgets/left_drawer.dart';
 import 'package:flutter/material.dart';
-
+import 'package:absolute_ballin/widgets/product_card.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -9,10 +10,10 @@ class MyHomePage extends StatelessWidget {
     final String kelas = "D"; // Class
 
     final List<ItemHomepage> items = [
-    ItemHomepage("All Product", Icons.newspaper, Colors.blue),
-    ItemHomepage("My Product", Icons.add, Colors.green),
-    ItemHomepage("Logout", Icons.logout, Colors.red),
-  ];
+      ItemHomepage("All Products", Icons.storage, Colors.deepPurple),
+      ItemHomepage("My Products", Icons.store_mall_directory, Colors.red),
+      ItemHomepage("Add Products", Icons.add, Colors.purple),
+    ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,7 @@ class MyHomePage extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+      drawer: LeftDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -56,7 +58,6 @@ class MyHomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-
 
                   GridView.count(
                     primary: true,
@@ -120,58 +121,4 @@ class ItemHomepage {
  final IconData icon;
  final Color color;
  ItemHomepage(this.name, this.icon, this.color);
-}
-
-class ItemCard extends StatelessWidget {
- 
-
-  final ItemHomepage item; 
-  
-  const ItemCard(this.item, {super.key}); 
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-
-      color: item.color,
-
-      borderRadius: BorderRadius.circular(12),
-      
-      child: InkWell(
- 
-        onTap: () {
-
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
-            );
-        },
-
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Column(
-     
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-  
 }
