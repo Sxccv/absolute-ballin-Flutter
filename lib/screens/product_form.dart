@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:absolute_ballin/widgets/left_drawer.dart';
+import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:absolute_ballin/screens/menu.dart';
 
 class ProductFormPage extends StatefulWidget {
     const ProductFormPage({super.key});
@@ -13,15 +17,19 @@ class _ProductFormPageState extends State<ProductFormPage> {
   String _productName = "";
   String _productDesc = "";
   int _productPrice = 0;
+  int _productStock = 0;
   String _category = "equipment"; 
   String _thumbnail = "";
   String _player = "";
+  String _club = "";
   bool _isFeatured = false; 
 
   final List<String> _categories = [
     'equipment',
     'supplement',
+    'misc',
     'merch',
+    'player',
   ];
   
   int _countWords(String s) {
@@ -32,6 +40,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
   @override
   Widget build(BuildContext context) {
+      final request = context.watch<CookieRequest>();
       return Scaffold(
         appBar: AppBar(
           title: const Center(
@@ -39,7 +48,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
               'Add a Product',
             ),
           ),
-          backgroundColor: Colors.pink,
+          backgroundColor: Colors.purple,
           foregroundColor: Colors.white,
         ),
         drawer: LeftDrawer(),
@@ -110,6 +119,40 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     },
                   ),
                 ),
+
+                // === Stock ===
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Input your available stock",
+                      labelText: "Product Stock",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (String? value) {
+                      setState(() {
+                        _productStock = int.tryParse(value ?? "") ?? 0;
+                      });
+                    },
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter Stock!";
+                      }
+                      final parsed = int.tryParse(value);
+                      if (parsed == null) {
+                        return "Stock must be an integer!";
+                      }
+                      if (parsed <= 0) {
+                        return "Stock must be above 0!";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
 
                 // === Description ===
                 Padding(
@@ -205,6 +248,25 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   ),
                 ),
 
+                // === Club ===
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Club (opsional)",
+                      labelText: "Club",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _club = value!;
+                      });
+                    },
+                  ),
+                ),
+
                 // === Is Featured ===
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -227,42 +289,43 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.pink),
+                            MaterialStateProperty.all(Colors.purple),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Product Succesfully saved!'),
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Name: $_productName'),
-                                      Text('Price: \$$_productPrice'),
-                                      Text('Description: $_productDesc'),
-                                      Text('Category: $_category'),
-                                      Text('Thumbnail: $_thumbnail'),
-                                      Text('Player: $_player'),
-                                      Text('Featured : $_isFeatured')
-                                    ],
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('OK'),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      _formKey.currentState!.reset();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
+                          
+                          final response = await request.postJson(
+                            "https://randuichi-touya-absoluteballin.pbp.cs.ui.ac.id/create-flutter/",
+                            jsonEncode({
+                              "name": _productName,
+                              "price": _productPrice,
+                              "stock": _productStock,
+                              "description": _productDesc,
+                              "thumbnail": _thumbnail,
+                              "category": _category,
+                              "player": _player,
+                              "club": _club,
+                              "is_featured": _isFeatured,
+                            }),
                           );
+                          if (context.mounted) {
+                            if (response['status'] == 'success') {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("product successfully saved!"),
+                              ));
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MyHomePage()),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Something went wrong, please try again."),
+                              ));
+                            }
+                          }
                         }
                       },
                       child: const Text(

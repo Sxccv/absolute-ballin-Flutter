@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:absolute_ballin/screens/menu.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:absolute_ballin/screens/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +14,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.pink).copyWith(secondary: Colors.pinkAccent[100]),
+    return Provider(
+      create: (_) {
+        CookieRequest request = CookieRequest();
+        return request;
+      },
+      child: MaterialApp(
+        title: 'Absolute Ballin',
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
+          .copyWith(secondary: Colors.purpleAccent[400]),
+        ),
+        home: const LoginPage(),
       ),
-      home: MyHomePage(),
     );
   }
 }

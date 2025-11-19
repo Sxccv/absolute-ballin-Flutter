@@ -1,3 +1,4 @@
+import 'package:absolute_ballin/screens/product_list.dart';
 import 'package:flutter/material.dart';
 import 'package:absolute_ballin/screens/menu.dart';
 import 'package:absolute_ballin/screens/product_form.dart';
@@ -27,6 +28,22 @@ class ItemCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => ProductFormPage()),
               );
+          }
+          else if (item.name == "All Products") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProductListPage()
+              ),
+            );
+          }
+          else if (item.name == "My Products") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProductListPage(showOnlyMine: true),
+              ),
+            );
           }
         },
         child: Container(
