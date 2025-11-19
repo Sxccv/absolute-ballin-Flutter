@@ -2,7 +2,6 @@ import 'package:absolute_ballin/screens/product_list.dart';
 import 'package:flutter/material.dart';
 import 'package:absolute_ballin/screens/menu.dart';
 import 'package:absolute_ballin/screens/product_form.dart';
-import 'package:absolute_ballin/screens/product_list.dart';
 import 'package:absolute_ballin/screens/login.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
